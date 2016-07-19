@@ -1,0 +1,20 @@
+{
+  "name": "message-bus",
+  "version": "1.0.0",
+  "description": "amqp message bus client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rabbitmq",
+    "client"
+  ],
+  "author": "ron.chi",
+  "license": "MIT",
+  "dependencies": {
+    "amqplib": "^0.4.2",
+    "q": "^1.4.1",
+    "when": "^3.7.7"
+  }
+}
