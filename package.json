@@ -1,14 +1,14 @@
 {
-  "name": "message-bus",
+  "name": "node-esb",
   "version": "1.0.0",
-  "description": "amqp message bus client",
+  "description": "Base on RabbitMq , ESB system with nodejs",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "rabbitmq",
-    "client"
+    "esb"
   ],
   "author": "ron.chi",
   "license": "MIT",
