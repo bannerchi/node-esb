@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 "use strict";
-var core = require('./lib/core');
+var core = require('./lib/messagebus');
 var messageBus = new core("amqp://localhost");
 var keys = process.argv.slice(2);
 console.log(keys);
