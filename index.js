@@ -15,17 +15,42 @@ if(action == "send"){
 	var exchange = keys[1];
 	var msg = keys[3];
 	var rk = keys[2];
-	messageBus.send(exchange, rk, "topic", msg)
+	messageBus.send(exchange, rk, msg)
 } else if(action == "listen"){
 	var exchange = keys[1];
 	var queue = keys[2];
 	var rk = keys[3];
-	var arr_rk = rk.split(',');
-	console.log(arr_rk);
-	messageBus.listen(exchange, queue, "topic", arr_rk, {}, function(msg){
+	var arr_rk = [];
+	if (!rk){
+		arr_rk = null;
+	} else {
+		arr_rk = rk.split(',');
+	}
+
+	messageBus.listen(exchange, queue, arr_rk, {
+		durable: true,
+		exclusive: false,
+		autoDelete: false
+	}, function(msg){
+
+		messageBus.ack(msg);
 		var res = JSON.parse(msg.content.toString());
-		console.log(res.dd);
+		console.log(res);
 	});
+} else if(action == 'exchange'){
+	var exchange = keys[1];
+
+	messageBus.declareExchange(exchange, null, {
+		durable : true,
+		internal : false,
+		autoDelete : false
+	});
+} else if (action == 'unbind'){
+	var exchange = keys[1];
+	var queue = keys[2];
+	var rk = keys[3];
+
+	messageBus.unbindRoutingKey(queue, exchange, rk);
 } else {
 	console.log("wrong action");
 }
