@@ -2,6 +2,7 @@
 "use strict";
 var core = require('./lib/messagebus');
 var daemon = require('./lib/daemon');
+var cron = require('./lib/cron');
 var messageBus = new core("amqp://localhost");
 var keys = process.argv.slice(2);
 console.log(keys);
@@ -81,6 +82,10 @@ if(action == "send"){
 	daemon.desc(name, function (apps) {
 		console.log(apps);
 	});
+} else if(action == 'cron-create'){
+	cron.createJob('*/2 * * * * *', function () {
+		console.log("let's go \n");
+	}, true);
 } else {
 	console.log("wrong action");
 }
