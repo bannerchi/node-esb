@@ -44,10 +44,5 @@ Listener.prototype._process = function (msg) {
 	that.messagebus.ack(msg);
 };
 
-Listener.prototype.getQueueName = function (dirName, fileName) {
-	dirName = path.basename(dirName);
-	fileName = path.basename(fileName, '.js');
-	return  dirName + "/" + fileName;
-};
 
 module.exports = Listener;
