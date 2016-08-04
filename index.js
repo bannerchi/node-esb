@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 "use strict";
+var when = require('when');
 var core = require('./lib/messagebus');
 var daemon = require('./lib/daemon');
 var cron = require('./lib/cron');
+var listener = require('./core/listener');
 var messageBus = new core("amqp://localhost");
 var keys = process.argv.slice(2);
 console.log(keys);
@@ -32,16 +34,44 @@ if(action == "send"){
 		arr_rk = rk.split(',');
 	}
 
-	messageBus.listen(exchange, queue, arr_rk, {
+	var objExchange = {};
+	objExchange.name = exchange;
+	objExchange.option = {
+		durable : true,
+		internal : false,
+		autoDelete : false
+	};
+	objExchange.type = 'topic';
+
+	var objQueue = {};
+	objQueue.name = queue;
+	objQueue.option = {
 		durable: true,
 		exclusive: false,
 		autoDelete: false
-	}, function(msg){
-
-		messageBus.ack(msg);
-		var res = JSON.parse(msg.content.toString());
-		console.log(res);
-	});
+	};
+	var processFunc = function (msg) {
+		var defer = when.defer();
+		try{
+			var res = JSON.parse(msg.content.toString());
+			defer.resolve(res);
+		} catch(e){
+			defer.reject(e);
+		}
+		return defer.promise;
+	};
+	var instanceListener = new listener(processFunc);
+	instanceListener.listen(objExchange, objQueue, arr_rk);
+	// messageBus.listen(exchange, queue, arr_rk, {
+	// 	durable: true,
+	// 	exclusive: false,
+	// 	autoDelete: false
+	// }, function(msg){
+	//
+	// 	messageBus.ack(msg);
+	// 	var res = JSON.parse(msg.content.toString());
+	// 	console.log(res);
+	// });
 } else if(action == 'exchange'){
 	var exchange = keys[1];
 
@@ -86,6 +116,10 @@ if(action == "send"){
 	cron.createJob('*/2 * * * * *', function () {
 		console.log("let's go \n");
 	}, true);
+} else if(action == 'test-listener'){
+	var ll = new listener();
+	var t = ll.getQueueName(__dirname, __filename);
+	console.log(t);
 } else {
 	console.log("wrong action");
 }
