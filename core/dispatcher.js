@@ -1,15 +1,53 @@
-/**
- TODO 调度器
- dispatcher for listener
- listenerId = 1  listener
- 1. mysql
- 2. f1 = base path + exchange name  ex: ../connectors/myExchange
- 3. var allQueue = require('require-dir')(f1); //判断dir 是否存在, 是否有文件
- var listener = allQueue[listener['name']];
- exports.startListener = function(){};
- 基础 ： ./connectors
- ../myExchange
- .../myQueue1.js
- .../myQueue2.js
- .../myQueue3.js
- */
+'use strict';
+
+var chalk = require('chalk');
+var mysqlPool = require('./mysqlPool').getPool();
+var fs = require('fs'),
+    path = require('path');
+
+module.exports = function () {
+    return {
+        startListener : function (listenerId) {
+            console.log("Starting listener service");
+
+            var sql  = "SELECT * from `listeners` where";
+            if (listenerId.toString().match(/^[0-9]+$/)) {
+                sql +=  " `id` = '" + listenerId + "'";
+            } else {
+                sql +=  " `active` = 'enabled'";
+            }
+
+            mysqlPool.getConnection(function(err, connection) {
+                connection.query(sql, function(err, rows) {
+                    if (err || !rows[0]) {
+                        console.log('No listener found');
+                        return;
+                    }
+
+                    rows.forEach( function (row) {
+                        var listener = path.join(__dirname, '../exchange/' + row.exchange
+                        + '/' + row.queue + '.js');
+
+                        fs.stat(listener, function (err, stats) {
+                            if (err) {
+                                console.error('No listener file found:' + row.exchange
+                                + '/'  + row.queue);
+                            } else if (stats.isFile ()) {
+                                if (row.active == 'disabled') {
+                                    console.error(chalk.red('listener disabled : '),row.exchange
+                                    + '/'  + row.queue);
+                                    return;
+                                }
+                                require(listener).start();
+                            }
+                        });
+                    });
+                });
+            });
+        }
+    }
+};
+
+
+
+
