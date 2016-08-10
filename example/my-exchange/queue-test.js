@@ -4,7 +4,7 @@ var util = require('util');
 var Listener = require('../../core/listener');
 var Payload = require('../../core/payload');
 var when = require('when');
-
+//TODO Change this class name as you want
 function QueueTestListener() {}
 
 function run(msg) {

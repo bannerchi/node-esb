@@ -6,5 +6,5 @@ var program = require('commander');
 program
 	.version('0.0.1')
 	.command('listen [id||all]', 'start a listener with listener Id')
-	.command('build', 'Generate directory structure')
+	.command('build [basedir]', 'Generate directory structure')
 	.parse(process.argv);

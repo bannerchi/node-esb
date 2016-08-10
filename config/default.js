@@ -19,7 +19,7 @@ module.exports = {
 	mysql : {
 		host: '127.0.0.1',
 		user: 'root',
-		pwd: '123456',
+		pwd: '556213',
 		port: '3306',
 		database: 'node-esb'
 	}

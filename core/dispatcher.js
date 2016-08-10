@@ -8,8 +8,6 @@ var fs = require('fs'),
 module.exports = function () {
     return {
         startListener : function (listenerId) {
-            console.log("Starting listener service");
-
             var sql  = "SELECT * from `listeners` where";
             if (listenerId.toString().match(/^[0-9]+$/)) {
                 sql +=  " `id` = '" + listenerId + "'";
@@ -21,7 +19,7 @@ module.exports = function () {
                 connection.query(sql, function(err, rows) {
                     if (err || !rows[0]) {
                         console.log('No listener found');
-                        return;
+                        process.exit(1);
                     }
 
                     rows.forEach( function (row) {
@@ -32,13 +30,15 @@ module.exports = function () {
                             if (err) {
                                 console.error('No listener file found:' + row.exchange
                                 + '/'  + row.queue);
+                                process.exit(1);
                             } else if (stats.isFile ()) {
                                 if (row.active == 'disabled') {
                                     console.error(chalk.red('listener disabled : '),row.exchange
                                     + '/'  + row.queue);
-                                    return;
+                                    process.exit(1);
                                 }
                                 require(listener).start();
+                                console.log("Starting listener " + row.name);
                             }
                         });
                     });
