@@ -17,9 +17,19 @@ function run(msg) {
 	}
 	return deferred.promise;
 }
-
+/*
+  you can set connection into config file
+  ex : amqp://localhost:55555 or
+  {
+    protocol: 'amqp',
+    host:'',
+    port:'',
+    username:'',
+    password:''
+  }
+ */
 QueueTestListener.prototype.start = function () {
-	var listener = new Listener(run);
+	var listener = new Listener(run, 'amqp://localhost');
 	
 	listener.listen(
 		Payload.getExchange(__dirname, 'topic'),

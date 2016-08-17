@@ -6,21 +6,30 @@ var path = require('path');
 
 function Payload() {}
 
-Payload.prototype.getExchange = function (dirName, type) {
+Payload.prototype.getExchange = function (dirName, type, exchangeOption) {
+  	exchangeOption = exchangeOption || {
+	  durable : true,
+	  internal : false,
+	  autoDelete : false
+	};
 	return {
 		name : path.basename(dirName),
-		option : config.exchange.option,
+		option : exchangeOption,
 		type: type
 	}
 };
 
-Payload.prototype.getQueue = function (dirName, fileName) {
+Payload.prototype.getQueue = function (dirName, fileName, queueOption) {
 	dirName = path.basename(dirName);
 	fileName = path.basename(fileName, '.js');
-	
+    queueOption = queueOption || {
+		  durable: true,
+		  exclusive: false,
+		  autoDelete: false
+		};
 	return {
 		name : dirName + "/" + fileName,
-		option : config.queue.option
+		option : queueOption
 	}	
 };
 /**

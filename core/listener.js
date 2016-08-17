@@ -7,8 +7,8 @@ var when = require('when');
 var Errors = require('./error');
 var payload = require('./payload');
 
-function Listener(processFunc) {
-	this.messagebus = new MessageBus(config.amqp.connection);
+function Listener(processFunc, connection) {
+	this.messagebus = new MessageBus(connection);
 	// must be a promise
 	this.processFunction = processFunc;
 }
