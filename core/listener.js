@@ -43,6 +43,20 @@ Listener.prototype._process = function (msg) {
 	});
 	that.messagebus.ack(msg);
 };
-
+/**
+ * send msg to listener msg must be string
+ * msg json such as '{"dd":"ok"}' will get a good json object in process function
+ * @param exchange
+ * @param routingKey
+ * @param msg
+ */
+Listener.prototype.send = function (exchange, routingKey, msg) {
+	if(_.isString(msg)){
+		this.messagebus.send(exchange, routingKey, msg);
+	} else {
+		console.log('msg must be string');
+		process.exit(1);
+	}
+};
 
 module.exports = Listener;
