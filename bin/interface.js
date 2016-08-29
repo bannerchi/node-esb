@@ -28,9 +28,7 @@ if(funcName === 'listen'){
 			process.exit(1);
 		}
 		if (!cronId.toString().match(/[^0-9||all]/)) {
-			require('../core/dispatcher')({
-				password : "YOUR-PASSWORD"
-			}).startCron(cronId.toString());
+			require('../core/dispatcher')().startCron(cronId.toString());
 		} else {
 			console.log('cronId can only be numbers or "all"');
 			process.exit(1);
