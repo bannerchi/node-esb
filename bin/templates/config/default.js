@@ -1,3 +1,6 @@
+/**
+ * make you own config here
+ */
 module.exports = {
 	exchange : {
 		option : {
@@ -17,10 +20,10 @@ module.exports = {
 		connection : 'amqp://localhost'
 	},
 	mysql : {
-		host: '127.0.0.1',
-		user: 'root',
-		pwd: '556213',
-		port: '3306',
-		database: 'node-esb'
+		host : "127.0.0.1",
+		user : "root",
+		password : "",
+		port : 3306,
+		database : "node-esb"
 	}
 };

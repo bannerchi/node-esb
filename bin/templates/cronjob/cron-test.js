@@ -1,5 +1,5 @@
 'use strict';
-var CronJob = require('../../core/cronjob');
+var CronJob = require('node-esb').cronjob;
 
 function CronTest() {
 }

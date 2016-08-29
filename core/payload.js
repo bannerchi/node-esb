@@ -1,17 +1,17 @@
 'use strict';
 
-var config = require('config');
 var _ = require('lodash');
 var path = require('path');
 
 function Payload() {}
 
 Payload.prototype.getExchange = function (dirName, type, exchangeOption) {
-  	exchangeOption = exchangeOption || {
-	  durable : true,
-	  internal : false,
-	  autoDelete : false
+	var defaultConfig = {
+		durable : true,
+		internal : false,
+		autoDelete : false
 	};
+  	exchangeOption = _.extend(defaultConfig, exchangeOption);
 	return {
 		name : path.basename(dirName),
 		option : exchangeOption,
@@ -22,11 +22,12 @@ Payload.prototype.getExchange = function (dirName, type, exchangeOption) {
 Payload.prototype.getQueue = function (dirName, fileName, queueOption) {
 	dirName = path.basename(dirName);
 	fileName = path.basename(fileName, '.js');
-    queueOption = queueOption || {
-		  durable: true,
-		  exclusive: false,
-		  autoDelete: false
-		};
+	var defaultConfig = {
+		durable: true,
+		exclusive: false,
+		autoDelete: false
+	};
+    queueOption = _.extend(defaultConfig, queueOption);
 	return {
 		name : dirName + "/" + fileName,
 		option : queueOption

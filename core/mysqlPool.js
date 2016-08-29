@@ -1,18 +1,24 @@
 'use strict';
-
-var config = require('config');
 var mysql = require('mysql');
-var pool = undefined;
+var _ = require('lodash');
 
-module.exports.getPool  = function(){
-    if (pool == undefined){
-        pool = mysql.createPool({
-            host     : config.mysql.host,
-            user     : config.mysql.user,
-            password : config.mysql.pwd,
-            port     : config.mysql.port,
-            database : config.mysql.database
-        });
+function MysqlPool(config){
+	var defaultConfig = {
+		host : "127.0.0.1",
+		user : "root",
+		password : "",
+		port : 3306,
+		database : "node-esb"
+	};
+    this.pool = null;
+    this.config = _.extend(defaultConfig, config);
+}
+
+MysqlPool.prototype.getPool = function () {
+    if(this.pool === null){
+        this.pool = mysql.createPool(this.config);
     }
-    return pool;
+    return this.pool
 };
+
+module.exports = MysqlPool;

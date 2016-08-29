@@ -1,7 +1,6 @@
 'use strict';
 var MessageBus = require('../lib/messagebus');
 var path = require('path');
-var config = require('config');
 var _ = require('lodash');
 var when = require('when');
 var Errors = require('./error');

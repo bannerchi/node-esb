@@ -20,7 +20,7 @@ var listenerId = program.args;
 
 
 if(program.test){
-	var f1 = '../example/my-exchange';
+	var f1 = './templates/my-exchange';
 	var allQueue = require('require-dir')(f1);
 	var listener = allQueue['queue-test'];
 	listener.start();

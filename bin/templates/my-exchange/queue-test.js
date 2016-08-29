@@ -1,8 +1,8 @@
 'use strict';
 
 var util = require('util');
-var Listener = require('../../core/listener');
-var Payload = require('../../core/payload');
+var Listener = require('node-esb').listener;
+var Payload = require('node-esb').payload;
 var when = require('when');
 //TODO Change this class name as you want
 function QueueTestListener() {}
@@ -34,7 +34,7 @@ QueueTestListener.prototype.start = function () {
 	listener.listen(
 		Payload.getExchange(__dirname, 'topic'),
 		Payload.getQueue(__dirname, __filename),
-		Payload.getRoutingKey()
+		Payload.getRoutingKey() //default is ["#"] maybe you should make this yourself
 	);
 };
 
