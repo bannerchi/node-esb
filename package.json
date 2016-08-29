@@ -1,8 +1,11 @@
 {
   "name": "node-esb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Base on RabbitMq , ESB system with nodejs",
   "main": "index.js",
+  "bin": {
+    "node-esb": "./bin/cli.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,9 +17,12 @@
   "license": "MIT",
   "dependencies": {
     "amqplib": "^0.4.2",
+    "commander": "^2.9.0",
     "cron": "^1.1.0",
+    "lodash": "^4.14.1",
+    "mysql": "^2.11.1",
     "pm2": "^1.1.3",
-    "q": "^1.4.1",
+    "require-dir": "^0.3.0",
     "when": "^3.7.7"
   }
 }
