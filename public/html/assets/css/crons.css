@@ -1,0 +1,12 @@
+.sidebar:before, .sidebar{
+    width: 200px;
+}
+.main-content {
+    margin-left: 200px;
+}
+.nav-special-li {
+    color: #fff !important;
+}
+.nav-special-a {
+    display: inline-block !important;
+}
