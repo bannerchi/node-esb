@@ -1,18 +1,18 @@
-#Node-esb
+# Node-esb
 文档： 中文 | English
-##目录
+## 目录
 - [node-esb](#node-esb)
 	- [项目描述](#项目描述)
 	- [安装](#安装)
 	- [使用说明](#使用说明)
 	- [项目进度](#项目进度)
 	
-##项目描述
+## 项目描述
 
-###Esb系统
+### Esb系统
 esb是一个中间件系统，负责链接用户逻辑和第三方接口，主要是处理大量的并发任务，本质是一个消息队列 + 定时任务系统。
 
-##安装
+## 安装
 
 ```bash
 #use cli
@@ -21,13 +21,13 @@ npm install -g https://github.com/bannerchi/node-esb
 npm install --save https://github.com/bannerchi/node-esb
 ```
 
-##使用说明
+## 使用说明
 *v1.0*
-###CLI
+### CLI
 
 为esb提供了一个cli，主要是构建代码，建exchange，queue,cron时使用
 
-####构建结构
+#### 构建结构
 在根目录下
 
 ```bash
@@ -102,7 +102,7 @@ node-esb build -h
 node-esb listen -h
 ```
 
-##项目进度
+## 项目进度
 - [x] messagebus 底层封装，主要封装rabbiitMq 方法。
 - [x] daemon 封装，主要用于处理后台程序运行和管理，基于pm2。
 - [x] cron 封装， 处理秒级别cronjob.
