@@ -1,6 +1,6 @@
 'use strict';
 
-var cron = require('../lib/cron');
+const cron = require('../lib/cron');
 
 /**
  * config such as {runOnInit: true, timeZone: 'Asia/Shanghai' }

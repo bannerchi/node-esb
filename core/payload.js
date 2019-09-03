@@ -1,12 +1,12 @@
 'use strict';
 
-var _ = require('lodash');
-var path = require('path');
+const _ = require('lodash');
+const path = require('path');
 
 function Payload() {}
 
 Payload.prototype.getExchange = function (dirName, type, exchangeOption) {
-	var defaultConfig = {
+	const defaultConfig = {
 		durable : true,
 		internal : false,
 		autoDelete : false
@@ -22,7 +22,7 @@ Payload.prototype.getExchange = function (dirName, type, exchangeOption) {
 Payload.prototype.getQueue = function (dirName, fileName, queueOption) {
 	dirName = path.basename(dirName);
 	fileName = path.basename(fileName, '.js');
-	var defaultConfig = {
+	const defaultConfig = {
 		durable: true,
 		exclusive: false,
 		autoDelete: false
@@ -47,7 +47,7 @@ Payload.prototype.getRoutingKey = function (){
  * @returns {string}
  */
 Payload.prototype.setData = function (input) {
-	var output = '';
+	let output = '';
 	if(_.isArray(input) || _.isObject(input)){
 		output = JSON.stringify(input);
 	} else if(_.isString(input)){

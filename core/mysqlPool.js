@@ -1,9 +1,9 @@
 'use strict';
-var mysql = require('mysql');
-var _ = require('lodash');
+const mysql = require('mysql');
+const _ = require('lodash');
 
 function MysqlPool(config){
-	var defaultConfig = {
+	const defaultConfig = {
 		host : "127.0.0.1",
 		user : "root",
 		password : "",

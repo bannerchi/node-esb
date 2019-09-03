@@ -1,19 +1,20 @@
 'use strict';
 
-var chalk = require('chalk');
-var mysqlPool = require('./mysqlPool');
-var shell = require('shelljs');
-var fs = require('fs'),
-    path = require('path');
+const chalk = require('chalk')
+const mysqlPool = require('./mysqlPool')
+const shell = require('shelljs')
+const fs = require('fs')
+const path = require('path')
 
 module.exports = function () {
-	var configFile = shell.pwd()+ '/esb-config/default.js'
+	const configFile = shell.pwd()+ '/esb-config/default.js'
 	//console.log(configFile);
+    let pool = {}
 	if(fs.existsSync(configFile)){
-		var config = require(configFile);
+		let config = require(configFile);
 		if(config.mysql !== undefined){
-			var mysqlInstance = new mysqlPool(config.mysql);
-			var pool = mysqlInstance.getPool();
+            const mysqlInstance = new mysqlPool(config.mysql);
+            pool = mysqlInstance.getPool();
 		} else {
 			console.log(chalk.red('mysql config is undefined'));
 			process.exit(1);
@@ -26,7 +27,7 @@ module.exports = function () {
 
     return {
         startListener : function (listenerId) {
-            var sql  = "SELECT * from `listeners` where";
+            let sql  = "SELECT * from `listeners` where";
             if (listenerId.match(/^[0-9]+$/)) {
                 sql +=  " `id` = '" + listenerId + "'";
             } else {
@@ -41,7 +42,7 @@ module.exports = function () {
                     }
 
                     rows.forEach( function (row) {
-                        var listener = shell.pwd() + '/exchange/' + row.exchange
+                        let listener = shell.pwd() + '/exchange/' + row.exchange
                         + '/' + row.queue + '.js';
 
                         fs.stat(listener, function (err, stats) {
@@ -49,7 +50,7 @@ module.exports = function () {
                                 console.error(chalk.red('No listener file found:' + row.exchange
                                 + '/'  + row.queue));
                             } else if (stats.isFile ()) {
-                                if (row.active == 'disabled') {
+                                if (row.active === 'disabled') {
                                     console.error(chalk.red('listener disabled : '),row.exchange
                                     + '/'  + row.queue);
 
@@ -65,7 +66,7 @@ module.exports = function () {
             });
         },
 	    startCron : function (cronId) {
-		    var sql  = "SELECT * from `cron` where";
+		    let sql  = "SELECT * from `cron` where";
 		    if (cronId.match(/^[0-9]+$/)) {
 			    sql +=  " `id` = '" + cronId + "'";
 		    } else {
@@ -80,7 +81,7 @@ module.exports = function () {
 				    }
 
 				    rows.forEach( function (row) {
-					    var cronjob = shell.pwd() + '/connector/cron/' + row.name + '.js';
+					    let cronjob = shell.pwd() + '/connector/cron/' + row.name + '.js';
 					    fs.stat(cronjob, function (err, stats) {
 						    if (err) {
 							    console.error('No cron job file found:' + row.name + '.js');
@@ -100,7 +101,7 @@ module.exports = function () {
 		    
 	    },
 	    getConfig : function () {
-		    var configFile = shell.pwd() + '/esb-config/default.js';
+		    let configFile = shell.pwd() + '/esb-config/default.js';
 		    if(fs.existsSync(configFile)){
 			    return require(configFile);
 		    } else {

@@ -1,10 +1,10 @@
 'use strict';
-var MessageBus = require('../lib/messagebus');
-var path = require('path');
-var _ = require('lodash');
-var when = require('when');
-var Errors = require('./error');
-var payload = require('./payload');
+const MessageBus = require('../lib/messagebus');
+const path = require('path');
+const _ = require('lodash');
+const when = require('when');
+const Errors = require('./error');
+const payload = require('./payload');
 
 function Listener(processFunc, connection) {
 	this.messagebus = new MessageBus(connection);
@@ -13,7 +13,7 @@ function Listener(processFunc, connection) {
 }
 
 Listener.prototype.listen = function (exchange, queue, routingKey) {
-	var that = this;
+	const that = this;
 	this.messagebus.declareExchange(
 		exchange.name,
 		exchange.type,
@@ -32,7 +32,7 @@ Listener.prototype.listen = function (exchange, queue, routingKey) {
 };
 
 Listener.prototype._process = function (msg) {
-	var that = this;
+	const that = this;
 	this.processFunction(msg).then(function (ok) {
 		console.log(ok);
 

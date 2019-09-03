@@ -1,5 +1,5 @@
 'use strict';
-var CronJob = require('node-esb').cronjob;
+const CronJob = require('node-esb').cronjob;
 
 function CronTest() {
 }
@@ -9,9 +9,9 @@ function runFunc(){
 }
 
 CronTest.prototype.run = function (pattern) {
-  var cj = new CronJob();
+    const cj = new CronJob();
 
-  cj.start(pattern, runFunc);
+    cj.start(pattern, runFunc);
 };
 
 module.exports = new CronTest();

@@ -1,14 +1,14 @@
 #!/usr/bin/env node
-var chalk = require('chalk');
-var program = require('commander');
-var daemon = require('../lib/daemon');
+const chalk = require('chalk');
+const program = require('commander');
+const daemon = require('../lib/daemon');
 program
 	.option('-t, --test', 'just test')
 	.option('-d, --daemon', 'start as daemon')
 	.option('-s, --stop', 'stop daemon listener')
 	.parse(process.argv);
 
-var listenerId = program.args;
+const listenerId = program.args;
 
  if (!listenerId.length) {
  	console.error(chalk.red('listenerId required'));
@@ -20,9 +20,9 @@ var listenerId = program.args;
 
 
 if(program.test){
-	var f1 = './templates/my-exchange';
-	var allQueue = require('require-dir')(f1);
-	var listener = allQueue['queue-test'];
+	const f1 = './templates/my-exchange';
+	const allQueue = require('require-dir')(f1);
+	const listener = allQueue['queue-test'];
 	listener.start();
 } else if(program.daemon){
 	daemon.start('queue-id-' + listenerId,

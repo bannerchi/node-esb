@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 "use strict";
-var chalk = require('chalk');
-var program = require('commander');
-var shell = require('shelljs');
-var fs = require('fs');
-var path = require('path');
+const chalk = require('chalk');
+const program = require('commander');
+const shell = require('shelljs');
+const fs = require('fs');
+const path = require('path');
 
 program
     .option('-c, --cron [name]', 'create cron dir')
@@ -24,7 +24,7 @@ if (program.cron) {
         setQueueFile('./exchange/' + program.exchange, program.queue);
     });
 } else {
-    var dirs = ['exchange','connector','esb-config'];
+    const dirs = ['exchange','connector','esb-config'];
     buildDirs(dirs);
 }
 
@@ -52,7 +52,7 @@ function setQueueFile(path, fileName){
 }
 
 function readTemplate(path) {
-	var template = fs.readFileSync(__dirname + '/templates/' + path, 'utf8');
+	const template = fs.readFileSync(__dirname + '/templates/' + path, 'utf8');
 
 	return template;
 }

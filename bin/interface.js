@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-var argvs = process.argv.slice(2);
-var _ = require('lodash');
+const argvs = process.argv.slice(2);
+const _ = require('lodash');
 
-var funcName = argvs[0];
+const funcName = argvs[0];
 
 if(funcName === 'listen'){
-	var func = argvs[1];
-	var listenerId = argvs[2];
+	const func = argvs[1];
+	const listenerId = argvs[2];
 	if(func === 'start'){
 		if(!listenerId){
 			console.log('listenerId is required');
@@ -20,8 +20,8 @@ if(funcName === 'listen'){
 		}
 	}
 } else if(funcName === 'cron'){
-	var func = argvs[1];
-	var cronId = argvs[2];
+	const func = argvs[1];
+	const cronId = argvs[2];
 	if(func === 'start'){
 		if(!cronId){
 			console.log('cronId is required');

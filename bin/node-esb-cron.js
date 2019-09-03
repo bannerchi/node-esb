@@ -1,14 +1,14 @@
 #!/usr/bin/env node
-var chalk = require('chalk');
-var program = require('commander');
-var daemon = require('../lib/daemon');
+const chalk = require('chalk');
+const program = require('commander');
+const daemon = require('../lib/daemon');
 program
 	.option('-t, --test', 'just test')
 	.option('-d, --daemon', 'start as daemon')
 	.option('-s, --stop', 'stop daemon cron')
 	.parse(process.argv);
 
-var cronJobId = program.args;
+const cronJobId = program.args;
 
  if (!cronJobId.length) {
  	console.error(chalk.red('cronJobId required'));
@@ -20,9 +20,9 @@ var cronJobId = program.args;
 
 
 if(program.test){
-	var f1 = './templates/cronjob';
-	var allQueue = require('require-dir')(f1);
-	var cornJob = allQueue['cron-test'];
+	const f1 = './templates/cronjob';
+	const allQueue = require('require-dir')(f1);
+	const cornJob = allQueue['cron-test'];
 	cornJob.run('*/2 * * * * *');
 } else if(program.daemon){
 	daemon.start('cron-id-' + cronJobId,

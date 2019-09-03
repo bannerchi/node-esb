@@ -1,16 +1,16 @@
 'use strict';
 
-var util = require('util');
-var Listener = require('node-esb').listener;
-var Payload = require('node-esb').payload;
-var when = require('when');
+const util = require('util');
+const Listener = require('node-esb').listener;
+const Payload = require('node-esb').payload;
+const when = require('when');
 //TODO Change this class name as you want
 function QueueTestListener() {}
 
 function run(msg) {
-	var deferred = when.defer();
+	const deferred = when.defer();
 	try{
-		var res = JSON.parse(msg.content.toString());
+		const res = JSON.parse(msg.content.toString());
 		deferred.resolve(res);
 	} catch(e){
 		deferred.reject(e);
@@ -29,7 +29,7 @@ function run(msg) {
   }
  */
 QueueTestListener.prototype.start = function () {
-	var listener = new Listener(run, 'amqp://localhost');
+	const listener = new Listener(run, 'amqp://localhost');
 	
 	listener.listen(
 		Payload.getExchange(__dirname, 'topic'),
