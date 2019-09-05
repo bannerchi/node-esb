@@ -25,7 +25,7 @@ npm install --save https://github.com/bannerchi/node-esb
 *v1.0*
 ### CLI
 
-为esb提供了一个cli，主要是构建代码，建exchange，queue,cron时使用
+为esb提供了一个cli，主要是构建代码，建exchange，queue,~~cron~~时使用
 
 #### 构建结构
 在根目录下
@@ -39,11 +39,11 @@ node-esb build [baseDir]
 - <br>
 --connector <br>
 --exchange <br>
---esb-config <br>
+~~--esb-config~~
 
-*其中connector目录中放cronjob的文件* <br>
+~~*其中connector目录中放cronjob的文件*~~
 
-*其中esb-config目录中放配置文件*
+~~*其中esb-config目录中放配置文件*~~
 
 
 - - -
@@ -75,42 +75,41 @@ function run(msg) {}
 
 - - -
 
-创建一个cron目录用于放cronjob文件
-
-```bash
-node-esb build -c YOUR-CRON-NAME
-```
+~~创建一个cron目录用于放cronjob文件~~
 
 - - -
 
-接下来启动一个listener,listenerId是在数据库里面保存的id。
-```bash
-node-esb listen [listenerId]
-```
-启动后台运行的listener
+~~接下来启动一个listener,listenerId是在数据库里面保存的id。~~
 
-```bash
-node-esb listen [listenerId] -d
-```
+~~启动后台运行的listener~~
 
-*cron 的命令和listen的类似*
+
+~~*cron 的命令和listen的类似*~~
 
 **更多的cli命令请使用-h 参数查看**
 ```bash
 node-esb -h
 node-esb build -h
-node-esb listen -h
 ```
 
 ## 项目进度
 - [x] messagebus 底层封装，主要封装rabbiitMq 方法。
 - [x] daemon 封装，主要用于处理后台程序运行和管理，基于pm2。
-- [x] cron 封装， 处理秒级别cronjob.
+
+~~- [x] cron 封装， 处理秒级别cronjob.~~
 - [x] listener 类， 面向用户使用，也是用户最常用的类。
+- [x] transformer 类， 面向用户使用，也是用户最常用的类。
 - [x] payload 类 ， 结合listener使用处理数据和 exchange queue关系。
 - [x] dispatcher 类， 负责连接数据库和listener关系。
 - [x] cli工具 创建结构;
-- [x] cli工具 创建listener;
-- [x] cli工具 创建cron job;
-- [x] 数据库结构和字段设计; 
-- [ ] web界面提供;
+
+~~- [x] cli工具 创建listener;~~
+
+- [ ] listener transformer 的测试用例;
+- [ ] 详细的说明文档;
+
+~~- [x] cli工具 创建cron job;~~
+~~- [x] 数据库结构和字段设计;~~ 
+
+## 项目说明
+近期对之前项目做了比较大的调整不能对前面版本的兼容，

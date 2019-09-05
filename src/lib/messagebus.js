@@ -13,10 +13,9 @@ function MessageBus(connections){
 }
 
 MessageBus.prototype.getConnection = function () {
-    const that = this;
     const deferred = when.defer();
-    amqp.connect(this.connection).then(function(conn) {
-		that.conn = conn;
+    amqp.connect(this.connection).then((conn) => {
+		this.conn = conn;
 		deferred.resolve(conn);
 	}, function(err){
 		deferred.reject(err);
@@ -26,18 +25,16 @@ MessageBus.prototype.getConnection = function () {
 };
 
 MessageBus.prototype.getChannel = function () {
-    const that = this;
     const deferred = when.defer();
-    this.getConnection().then(function (conn) {
+    this.getConnection().then((conn) => {
 		process.once('SIGINT', function() { conn.close(); });
-		if(that.channel !== null){
-			deferred.resolve(that.channel);
+		if(this.channel !== null){
+			deferred.resolve(this.channel);
 		} else {
 			conn.createChannel().then(function(ch){
 				deferred.resolve(ch);
 			});
 		}
-
 	}, function (err) {
 		deferred.reject(err);
 	});
@@ -61,13 +58,11 @@ MessageBus.prototype.declareExchange = function (name, type, options) {
 	const deferred = when.defer();
 	options = options || {durable: false};
 	type = type || 'topic';
-	const that = this;
 	this.getChannel().then(function (ch) {
 		return ch.assertExchange(name, type, options).then(function (ok) {
 			deferred.resolve(ok);
 			ch.close();
 		});
-
 	}, function (err) {
 		deferred.reject(err);
 	});
@@ -77,14 +72,13 @@ MessageBus.prototype.declareExchange = function (name, type, options) {
 
 MessageBus.prototype.send = function (ex, routingKey, msg) {
 	routingKey = routingKey || '#';
-	const that = this;
-	this.getChannel().then(function (ch) {
+	this.getChannel().then((ch) => {
 		ch.publish(ex, routingKey, new Buffer(msg));
 		return ch.close();
 	}, function (err) {
-		console.log(err.stack);
-	}).ensure(function() {
-		that.conn.close();
+		console.log('send msg error:', err.stack);
+	}).ensure(() => {
+		this.conn.close();
 	});
 };
 /**
@@ -98,9 +92,8 @@ MessageBus.prototype.send = function (ex, routingKey, msg) {
 MessageBus.prototype.listen = function (ex, queueName, routingKeys, options,  processFunc) {
 	routingKeys = routingKeys || ['#'];
 	options = options || {exclusive: true};
-	const that = this;
-	this.getChannel().then(function (ch) {
-		that.channel = ch;
+	this.getChannel().then((ch) => {
+		this.channel = ch;
 		let ok = ch.assertQueue(queueName, options);
 
 		ok = ok.then(function(qok) {
@@ -122,6 +115,7 @@ MessageBus.prototype.listen = function (ex, queueName, routingKeys, options,  pr
 		});
 	}, function(err){
 		console.log(err.stack);
+		// TODO add to error queue
 	}).then(null, console.warn);
 };
 
@@ -129,21 +123,29 @@ MessageBus.prototype.ack = function (msg) {
 	this.channel.ack(msg);
 };
 /**
- * 解绑队列
+ * 处理队列的绑定解绑
  * @param queue
  * @param ex
  * @param routingKey
+ * @param isBind
  */
-MessageBus.prototype.unbindRoutingKey = function (queue, ex, routingKey) {
-	const that = this;
+MessageBus.prototype.toggleBindQueue = function (queue, ex, routingKey, isBind = true) {
 	this.getChannel().then(function (ch) {
-		return ch.unbindQueue(queue, ex, routingKey).then(function () {
-			ch.close();
-		});
+		if (!isBind) {
+            return ch.unbindQueue(queue, ex, routingKey).then(function () {
+            	console.log(`unbind queue:${queue} ex:${ex} routingKey: ${routingKey}`)
+                ch.close();
+            });
+		} else {
+            return ch.bindQueue(queue, ex, routingKey).then(function () {
+                console.log(`bind queue:${queue} ex:${ex} routingKey: ${routingKey}`)
+                ch.close();
+            });
+		}
 	}, function (err) {
-		console.log(err.stack);
-	}).then(null, console.warn).ensure(function() {
-		that.conn.close();
+		console.log('toggleBindQueue error:', err.stack);
+	}).then(null, console.warn).ensure(() => {
+		this.conn.close();
 	});
 
 };

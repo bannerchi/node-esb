@@ -1,5 +1,5 @@
-exports.payload = require('./core/payload');
+exports.payload = require('./src/core/payload');
 
-exports.listener = require('./core/listener');
+exports.listener = require('./src/core/listener');
 
-exports.cronjob = require('./core/cronjob');
+exports.cronjob = require('./src/core/cronjob');

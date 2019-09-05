@@ -1,10 +1,7 @@
 'use strict';
 const MessageBus = require('../lib/messagebus');
-const path = require('path');
 const _ = require('lodash');
-const when = require('when');
-const Errors = require('./error');
-const payload = require('./payload');
+const ERROR_QUEUE = 'error_queue'
 
 function Listener(processFunc, connection) {
 	this.messagebus = new MessageBus(connection);
@@ -13,34 +10,37 @@ function Listener(processFunc, connection) {
 }
 
 Listener.prototype.listen = function (exchange, queue, routingKey) {
-	const that = this;
 	this.messagebus.declareExchange(
 		exchange.name,
 		exchange.type,
 		exchange.option)
-		.then(function (ok) {
-		that.messagebus.listen(
+		.then((ok) =>  {
+		this.messagebus.listen(
 			exchange.name,
 			queue.name,
 			routingKey,
 			queue.option,
-			that._process.bind(that));
-	}, function(e){
-		console.log(e.message);
+			this._process.bind(this));
+	}, (e) => {
+		if (e) {
+			console.log(`Error occur when listen , ${e.message}`);
+		}
 	});
 
 };
 
-Listener.prototype._process = function (msg) {
-	const that = this;
-	this.processFunction(msg).then(function (ok) {
-		console.log(ok);
+Listener.prototype._errorHandler = function (e, msg) {
+	this.send(ERROR_QUEUE, '#', msg)
+};
 
-	}, function(err){
-		//TODO error handler
+Listener.prototype._process = function (msg) {
+	this.processFunction(msg).then((ok) => {
+		console.log('处理函数返回结果ok', ok);
+	}, (err) => {
+		this._errorHandler(err, msg)
 		console.log(err.message);
 	});
-	that.messagebus.ack(msg);
+	this.messagebus.ack(msg);
 };
 /**
  * send msg to listener msg must be string
@@ -57,5 +57,13 @@ Listener.prototype.send = function (exchange, routingKey, msg) {
 		process.exit(1);
 	}
 };
+
+Listener.prototype.unBinding = function (queue, ex, routingKey) {
+	this.messagebus.toggleBindQueue(queue, ex, routingKey, false)
+}
+
+Listener.prototype.binding = function (queue, ex, routingKey) {
+    this.messagebus.toggleBindQueue(queue, ex, routingKey)
+}
 
 module.exports = Listener;

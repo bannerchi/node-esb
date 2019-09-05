@@ -57,4 +57,8 @@ Payload.prototype.setData = function (input) {
 	return output;
 };
 
+Payload.prototype.check = function (data) {
+	return !_.isEmpty(data)
+}
+
 module.exports = new Payload();
